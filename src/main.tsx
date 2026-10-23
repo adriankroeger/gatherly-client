@@ -9,7 +9,7 @@ const queryClient = new QueryClient();
 const router = createRouter({
   routeTree,
   context: {
-    queryClient
+    queryClient,
   },
   defaultPreloadStaleTime: 0,
   scrollRestoration: true,
@@ -27,8 +27,7 @@ if (rootElement && !rootElement?.innerHTML) {
   const root = ReactDom.createRoot(rootElement);
   root.render(
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />  
-    </QueryClientProvider>
-    )
-  ;
+      <RouterProvider router={router} />
+    </QueryClientProvider>,
+  );
 }
