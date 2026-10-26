@@ -1,4 +1,4 @@
-import type { EventSummary } from "../components/event-card";
+import type { EventSummary } from "../types/event";
 
 export default async function fetchEvents(): Promise<EventSummary[]> {
   const res = await fetch("/api/events");

@@ -22,7 +22,7 @@ function EventsComponent() {
         Upcoming <span className="bg-yellow px-2">events</span>
       </h1>
 
-      <div className="grid grid-cols-[repeat(auto-fill,minmax(340px,1fr))] gap-6">
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(min(340px,100%),1fr))] gap-6">
         {isSuccess && data.map((event) => <EventCard key={event.id} event={event} />)}
         {isPending && [...Array(6).keys()].map(key => <EventCardSkeleton key={key} />)}
         {isError && (

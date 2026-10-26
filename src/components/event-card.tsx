@@ -1,35 +1,20 @@
+import { Link } from "@tanstack/react-router";
+import { dateParts, formatNumber } from "../lib/format";
+import type { EventSummary } from "../types/event";
 import { Tag } from "./ui/tag";
 
-// Replaced by the generated OpenAPI type once the events endpoint exists
-export type EventSummary = {
-  id: string;
-  title: string;
-  category: string;
-  startsAt: string; // ISO 8601
-  capacity: number;
-};
-
-// en-GB: English names to match the UI copy, but day-before-month and 24h time
-const stubFormat = new Intl.DateTimeFormat("en-GB", {
-  weekday: "short",
-  day: "2-digit",
-  month: "short",
-  hour: "2-digit",
-  minute: "2-digit",
-  hourCycle: "h23",
-});
-const seatFormat = new Intl.NumberFormat("de-DE");
-
-function stubParts(iso: string) {
-  const parts = Object.fromEntries(stubFormat.formatToParts(new Date(iso)).map((p) => [p.type, p.value]));
-  return { weekday: parts.weekday, day: parts.day, month: parts.month, time: `${parts.hour}:${parts.minute}` };
-}
-
+// The title link stretches over the whole card (after:inset-0), so the card itself carries hover, press and focus
 export function EventCard({ event }: { event: EventSummary }) {
-  const { weekday, day, month, time } = stubParts(event.startsAt);
+  const { weekday, day, month, time } = dateParts(event.startsAt);
 
   return (
-    <article className="flex border-2 border-ink bg-surface shadow-hard">
+    <article
+      className="relative flex border-2 border-ink bg-surface shadow-hard
+                 motion-safe:transition-[transform,box-shadow] motion-safe:duration-100
+                 hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-hard-lg
+                 active:translate-x-1 active:translate-y-1 active:shadow-none
+                 has-focus-visible:outline-3 has-focus-visible:outline-offset-3 has-focus-visible:outline-cobalt"
+    >
       <time
         dateTime={event.startsAt}
         className="flex w-21 flex-none flex-col items-center justify-center gap-0.5 border-r-2 border-dashed border-ink py-3.5"
@@ -42,8 +27,16 @@ export function EventCard({ event }: { event: EventSummary }) {
 
       <div className="flex min-w-0 flex-1 flex-col gap-2 px-5 py-4">
         <Tag>{event.category}</Tag>
-        <h2 className="line-clamp-2 text-card font-bold">{event.title}</h2>
-        <p className="mt-auto font-mono text-label uppercase">{seatFormat.format(event.capacity)} seats</p>
+        <h2 className="line-clamp-2 text-card font-bold">
+          <Link
+            to="/events/$eventId"
+            params={{ eventId: event.id }}
+            className="after:absolute after:inset-0 focus-visible:outline-none"
+          >
+            {event.title}
+          </Link>
+        </h2>
+        <p className="mt-auto font-mono text-label uppercase">{formatNumber(event.capacity)} seats</p>
       </div>
     </article>
   );

@@ -50,7 +50,7 @@ nothing: the pagination button shows the loading state instead.
 2. Filter panel: `border-2 border-ink bg-surface p-4 shadow-hard`; row of fields (Search 2fr, Dates, Sort) that
    wraps, then a chip group for categories with the result count right-aligned in mono.
    Filters reflect the URL search params exactly — the selected chip is `aria-pressed`.
-3. Ticket-card grid (`grid-cols-[repeat(auto-fill,minmax(340px,1fr))] gap-6`).
+3. Ticket-card grid (`grid-cols-[repeat(auto-fill,minmax(min(340px,100%),1fr))] gap-6`).
 4. Pagination row.
 
 ## Event detail (plan steps 4, 13, 21, 24, 26, 30)

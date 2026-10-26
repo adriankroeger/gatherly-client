@@ -113,7 +113,7 @@ Use Tailwind's default 4px spacing scale. Standard values:
 | Gap between page sections | `gap-7` |
 | Card padding | `p-4` (dense) · `px-5 py-4` (ticket body) · `p-6` (panel) · `p-7` (hero) |
 | Gap inside cards | `gap-2` (ticket) · `gap-4` (panel) |
-| Card grid | `grid grid-cols-[repeat(auto-fill,minmax(340px,1fr))] gap-6` |
+| Card grid | `grid grid-cols-[repeat(auto-fill,minmax(min(340px,100%),1fr))] gap-6` |
 | Ticket stub width | `w-21` (84px, card) · `w-33` (132px, detail hero) |
 
 Prefer canonical v4 classes over arbitrary values (`w-21`, not `w-[84px]`); Tailwind IntelliSense flags them.
