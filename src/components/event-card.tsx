@@ -48,3 +48,18 @@ export function EventCard({ event }: { event: EventSummary }) {
     </article>
   );
 }
+
+// Decorative: the list around it carries aria-busy, so screen readers don't hear "Loading…" once per card.
+// min-h-32 matches the height the real card gets from its date stub, so nothing jumps when data arrives.
+export function EventCardSkeleton() {
+  return (
+    <div aria-hidden className="flex min-h-32 border-2 border-dashed border-ink bg-surface">
+      <div className="w-21 flex-none border-r-2 border-dashed border-ink bg-[repeating-linear-gradient(45deg,var(--color-paper)_0_8px,var(--color-subtle)_8px_16px)]" />
+      <div className="flex min-w-0 flex-1 flex-col gap-2 px-5 py-4">
+        <div className="h-5 w-14 bg-subtle" />
+        <div className="h-5 w-17/20 bg-subtle" />
+        <p className="mt-auto font-mono text-label text-muted uppercase">Loading…</p>
+      </div>
+    </div>
+  );
+}

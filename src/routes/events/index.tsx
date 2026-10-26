@@ -1,21 +1,21 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { EventCard } from "../../components/event-card";
-import type { EventSummary } from "../../components/event-card";
+import { EventCard, EventCardSkeleton } from "../../components/event-card";
+import { ErrorPanel } from "../../components/ui/error-panel";
+import { useQuery } from "@tanstack/react-query";
+import fetchEvents from "../../queries/fetchEvents";
 
 export const Route = createFileRoute("/events/")({
   component: EventsComponent,
 });
 
-// Mock until the list is fetched from the API (plan steps 4 and 6)
-const mockEvent: EventSummary = {
-  id: "evt-1",
-  title: "Spring Boot Meetup: Virtual Threads in Practice",
-  category: "Tech",
-  startsAt: "2026-11-06T18:30:00+01:00",
-  capacity: 1200,
-};
-
 function EventsComponent() {
+  const { data, isSuccess, isPending, isError, error, refetch } = useQuery({
+    queryKey: ["events"],
+    queryFn: fetchEvents,
+    retry: 1,
+    staleTime: 2*60*1000,
+  });
+
   return (
     <>
       <h1 className="font-display text-hero uppercase">
@@ -23,7 +23,13 @@ function EventsComponent() {
       </h1>
 
       <div className="grid grid-cols-[repeat(auto-fill,minmax(340px,1fr))] gap-6">
-        <EventCard event={mockEvent} />
+        {isSuccess && data.map((event) => <EventCard key={event.id} event={event} />)}
+        {isPending && [...Array(6).keys()].map(key => <EventCardSkeleton key={key} />)}
+        {isError && (
+          <ErrorPanel title="Couldn't load events" onRetry={refetch}>
+            {error.message}
+          </ErrorPanel>
+        )}
       </div>
     </>
   );
