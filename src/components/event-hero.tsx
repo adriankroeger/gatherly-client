@@ -28,3 +28,21 @@ export function EventHero({ event }: { event: EventDetail }) {
     </article>
   );
 }
+
+// Same vocabulary as EventCardSkeleton: dashed border, hatched stub, subtle bars.
+// Decorative: the wrapper around it carries aria-busy. Heights approximate the real hero so nothing jumps.
+export function EventHeroSkeleton() {
+  return (
+    <div aria-hidden className="flex flex-col border-2 border-dashed border-ink bg-surface sm:min-h-44 sm:flex-row">
+      <div
+        className="h-23 flex-none border-b-2 border-dashed border-ink bg-[repeating-linear-gradient(45deg,var(--color-paper)_0_8px,var(--color-subtle)_8px_16px)]
+                   sm:h-auto sm:w-33 sm:border-r-2 sm:border-b-0"
+      />
+      <div className="flex min-w-0 flex-1 flex-col gap-4 p-7">
+        <div className="h-5 w-14 bg-subtle" />
+        <div className="h-9 w-17/20 bg-subtle" />
+        <p className="mt-auto font-mono text-label text-muted uppercase">Loading…</p>
+      </div>
+    </div>
+  );
+}
