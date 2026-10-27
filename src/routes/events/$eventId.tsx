@@ -1,21 +1,31 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
 import { EventHero, EventHeroSkeleton } from "../../components/event-hero";
 import { ErrorPanel } from "../../components/ui/error-panel";
-import { useQuery } from "@tanstack/react-query";
+import { queryOptions, useQuery, useQueryClient } from "@tanstack/react-query";
 import fetchEventById from "../../queries/fetchEventById";
+import type { EventDetail } from "../../types/event";
+
+function eventQueryOptions(eventId: string) {
+  return queryOptions({
+    queryKey: ["events", eventId],
+    queryFn: () => fetchEventById(eventId),
+  });
+}
 
 export const Route = createFileRoute("/events/$eventId")({
   component: EventDetailComponent,
+  /* loader: ({ params: { eventId }, context: { queryClient } }) => queryClient.query({...eventQueryOptions(eventId)}) */
 });
 
 const crumbLink = "underline decoration-2 underline-offset-4 hover:bg-yellow";
 
 function EventDetailComponent() {
   const { eventId } = Route.useParams();
+  const queryClient = useQueryClient();
 
   const { data: event, isSuccess, isPending, isError, error, refetch, isFetching } = useQuery({
-    queryKey: ["events", eventId],
-    queryFn: () => fetchEventById(eventId),
+    ...eventQueryOptions(eventId),
+    initialData: queryClient.getQueryData<EventDetail[]>(["events"])?.find(({ id }) => id === eventId),
     retry: 1,
     staleTime: 2*60*1000,
   });
